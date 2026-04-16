@@ -47,7 +47,6 @@ const App = () => {
     }, [])
 
     useEffect(() => {
-        console.log("a")
         if (images.length === 0) return
 
         let columns = 4
