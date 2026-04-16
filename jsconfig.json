@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "paths": {
+            "@utils/*": ["./src/utils/*"],
+            "@hooks/*": ["./src/hooks/*"],
+            "@styles/*": ["./src/styles/*"],
+            "@root/*": ["./*"]
+        }
+    }
+}
