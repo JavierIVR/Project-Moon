@@ -10,7 +10,7 @@ import { random } from "@utils/tools"
 import { shuffle } from "@utils/tools"
 import { loadImages } from "@utils/tools"
 
-import { JSONBIN_API } from "@utils/consts"
+import { API_JSONBIN } from "@utils/consts"
 
 import { config } from "@root/config"
 
@@ -23,32 +23,31 @@ const App = () => {
     const [images, setImages] = useState([])
     const [splittedImages, setSplittedImages] = useState([])
 
-    const getData = async () => {
-        try {
-            const response = await fetch(`${JSONBIN_API.HOST}/${JSONBIN_API.PATHS.BIN}/${config.jsonbinBinId}`, {
-                method: "GET",
-                headers: {
-                    "x-access-key": config.jsonbinApiKey
-                }
-            })
-    
-            const data = await response.json()
-    
-            const images = await loadImages(data.record.images)
-    
-            setImages(images)
-
-            setLoading(false)
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
     useEffect(() => {
-        getData()
+        (async () => {
+            try {
+                const response = await fetch(`${API_JSONBIN.HOST}/${API_JSONBIN.PATHS.BIN}/${config.jsonbinBinId}`, {
+                    method: "GET",
+                    headers: {
+                        "x-access-key": config.jsonbinApiKey
+                    }
+                })
+
+                const data = await response.json()
+
+                const images = await loadImages(data.record.images)
+
+                setImages(images)
+
+                setLoading(false)
+            } catch (error) {
+                console.log(error)
+            }
+        })()
     }, [])
 
     useEffect(() => {
+        console.log("a")
         if (images.length === 0) return
 
         let columns = 4
@@ -62,12 +61,10 @@ const App = () => {
 
     return (
         <main>
-            {/* Backdrop + Spinner */}
             {(loading) &&
                 <div className="backdrop"><div className="spinner"></div></div>
             }
 
-            {/* Content */}
             {(!loading) &&
                 <Grid container className="container">
                     {splittedImages.map((images, i) => {
